@@ -49,7 +49,7 @@ module.exports.datastores = {
     *                                                                          *
     ***************************************************************************/
     adapter: 'sails-postgresql',
-    url: 'postgresql://sgtsmi:sgtsmi2018*@localhost:5432/sgtsmi',
+    url: 'postgresql://motoshopsr:motoshopsr@localhost:5432/motoshopsr',
     // url: 'mysql://user:password@host:port/database',
 
   },

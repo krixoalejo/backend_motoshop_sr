@@ -20,22 +20,4 @@ module.exports.routes = {
   'GET /usuarios/:id' : 'UsuariosController.obtenerUsuarioPorId',
   'POST /usuarios' : 'UsuariosController.crearUsuario',
   'POST /usuarios/ingresar' : 'UsuariosController.ingresarUsuario',
-
-  /**
-   * Rutas para los estados
-   */
-  'GET /estados': 'EstadosController.obtenerEstados',
-  'POST /estados': 'EstadosController.crearEstado',
-
-  /**
-   * Rutas para los tipos de vehiculos
-   */
-  'GET /tipoVehiculos': 'TipoVehiculosController.obtenerTipoVehiculos',
-  'POST /tipoVehiculos': 'TipoVehiculosController.crearTipoVehiculo',
-
-  /**
-   * Rutas para los tipos de usuarios
-   */
-  'GET /tipoUsuarios': 'TipoUsuariosController.obtenerTipoUsuarios',
-  'POST /tipoUsuarios': 'TipoUsuariosController.crearTipoUsuario',
 };

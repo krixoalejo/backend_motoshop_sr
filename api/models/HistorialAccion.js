@@ -18,9 +18,13 @@ module.exports = {
       type: 'number',
       columnName: 'idUsuario'
     },
-    idEstado: {
+    idVehiculo: {
       type: 'number',
-      columnName: 'idEstado'
+      columnName: 'idVehiculo'
+    },
+    estado: {
+      type: 'number',
+      columnName: 'estado'
     }
   }
 };

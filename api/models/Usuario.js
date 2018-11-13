@@ -1,12 +1,12 @@
 /**
- * User.js
+ * Usuario.js
  *
  * @description :: A model definition.  Represents a database table/collection/etc.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
 module.exports = {
-  tableName: 'usuarios',
+  tableName: 'usaurios',
   attributes: {
     id: {
       type: 'number',
@@ -14,13 +14,13 @@ module.exports = {
       unique: true,
       columnName: 'idUsuario',
     },
-    idTipoDocumento: {
-      type: 'number',
-      columnName: 'idTipoDocumento'
-    },
-    numeroDocumento: {
+    tipoIdentificacion: {
       type: 'string',
-      columnName: 'numeroDocumento'
+      columnName: 'tipoIdentificacion'
+    },
+    identificacion: {
+      type: 'string',
+      columnName: 'identificacion'
     },
     primerNombre: {
       type: 'string',
@@ -38,23 +38,26 @@ module.exports = {
       type: 'string',
       columnName: 'segundoApellido'
     },
-    idTipoUsuario: {
-      type: 'number',
-      columnName: 'idTipoUsuario'
-    },
     correoElectronico: {
       type: 'string',
       columnName: 'correoElectronico'
     },
-    clave: {
+    telefono: {
       type: 'string',
-      columnName: 'claveEncriptada'
+      columnName: 'telefono'
     },
-    idEstado: {
+    celular: {
+      type: 'string',
+      columnName: 'celular'
+    },
+    direccion: {
+      type: 'string',
+      columnName: 'direccion'
+    },
+    estado: {
       type: 'number',
-      columnName: 'idEstado'
+      columnName: 'estado'
     }
   }
-
 };
 

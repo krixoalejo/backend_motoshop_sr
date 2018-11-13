@@ -18,13 +18,37 @@ module.exports = {
       type: 'string',
       columnName: 'placa'
     },
-    idTipoVehiculo: {
-      type: 'number',
-      columnName: 'idTipoVehiculo'
+    marca: {
+      type: 'string',
+      columnName: 'marca'
     },
-    idEstado: {
+    linea: {
+      type: 'string',
+      columnName: 'linea'
+    },
+    modelo: {
+      type: 'string',
+      columnName: 'modelo'
+    },
+    cilindraje: {
+      type: 'string',
+      columnName: 'cilindraje'
+    },
+    color: {
+      type: 'string',
+      columnName: 'color'
+    },
+    usuario: {
       type: 'number',
-      columnName: 'idEstado'
+      columnName: 'usuario'
+    },
+    seguro: {
+      type: 'number',
+      columnName: 'seguro'
+    },
+    estado: {
+      type: 'number',
+      columnName: 'estado'
     }
   }
 };
