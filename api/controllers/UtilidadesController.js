@@ -6,8 +6,8 @@
  */
 
 module.exports = {
-    respuestaRetorno: function(estado, mensaje, res, data) {
-        if ( data ) {
+    respuestaRetorno: function (estado, mensaje, res, data) {
+        if (data) {
             return res.send({
                 'estado': estado,
                 'mensaje': mensaje,
@@ -19,7 +19,13 @@ module.exports = {
                 'mensaje': mensaje
             });
         }
+    },
+    obtenerEstado: function (estado) {
+        if (estado === 0) {
+            return 'Inactivo';
+        } else if (estado === 1) {
+            return 'Activo';
+        }
     }
-
 };
 

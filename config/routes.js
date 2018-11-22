@@ -14,10 +14,20 @@ module.exports.routes = {
   },
 
   /**
+   * Rutas para el vehículo
+   */
+
+  'GET /vehiculos/:id': 'VehiculosController.obtenerVehiculoPorId',
+  'GET /vehiculos': 'VehiculosController.obtenerVehiculos',
+  'POST /vehiculos': 'VehiculosController.crearVehiculo',
+  'PUT /vehiculos': 'VehiculosController.actualizarVehiculo',
+  'PUT /vehiculos/eliminar': 'VehiculosController.eliminarVehiculo',
+
+  /**
    * Rutas para el usuario
    */
-  'GET /usuarios' : 'UsuariosController.obtenerUsuarios',
-  'GET /usuarios/:id' : 'UsuariosController.obtenerUsuarioPorId',
-  'POST /usuarios' : 'UsuariosController.crearUsuario',
-  'POST /usuarios/ingresar' : 'UsuariosController.ingresarUsuario',
+  'GET /usuarios': 'UsuariosController.obtenerUsuarios',
+  'GET /usuarios/:id': 'UsuariosController.obtenerUsuarioPorId',
+  'POST /usuarios': 'UsuariosController.crearUsuario',
+  'POST /usuarios/ingresar': 'UsuariosController.ingresarUsuario',
 };

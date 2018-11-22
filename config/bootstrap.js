@@ -9,7 +9,7 @@
  * https://sailsjs.com/config/bootstrap
  */
 
-module.exports.bootstrap = async function(done) {
+module.exports.bootstrap = async function (done) {
 
   // By convention, this is a good place to set up fake data during development.
   //
@@ -32,20 +32,26 @@ module.exports.bootstrap = async function(done) {
   sails.jwtSecreto = "95_fsdFASDsdgasASDF_605_asdfweGrewgdGSDFsvxc43ASDF_QwRtfdCFr4_65";
   sails.constantes = {
     CORREO_IDENTIFICACION_YA_EXISTE: 'El usuario ya está registrado.',
+    ERROR_ACTUALIZAR_VEHICULO: 'Error al actualziar el vehículo.',
     ERROR_CREAR_USUARIO: 'Error al crear un usuario.',
+    ERROR_ELIMINAR_VEHICULO: 'Error al eliminar el vehículo.',
     ERROR_HALLAR_USUARIO: 'Error al hallar al usuario.',
     ERROR_HALLAR_USUARIOS: 'Error al hallar usuarios.',
     ERROR_CREAR_VEHICULO: 'Error al crear un vehículo.',
     ERROR_HALLAR_VEHICULO: 'Error al hallar el vehículo.',
     ERROR_HALLAR_VEHICULOS: 'Error al hallar vehículos.',
     NO_ENCONTRO_USUARIO: 'No se encontró al usuario.',
+    NO_ENCONTRO_USUARIO_IDENTIFICACION: 'No se encontró al usuario con esa identificación.',
     NO_ENCONTRO_USUARIOS: 'No se encontraron usuarios.',
     NO_ENCONTRO_VEHICULO: 'No se encontró el vehículo.',
     NO_ENCONTRO_VEHICULOS: 'No se encontraron vehículos.',
+    NO_INGRESO_IDENTIFICACION: 'No se ingresó la identificación del usuario.',
     USUARIO_ENCONTRADO: 'Usuario encontrado.',
     USUARIOS_ENCONTRADOS: 'Usuarios encontrados.',
     USUARIO_CREADO: 'Usuario creado exitosamente.',
+    VEHICULO_ACTUALIZADO: 'Vehículo actualziado exitosamente.',
     VEHICULO_CREADO: 'Vehículo creado exitosamente.',
+    VEHICULO_ELIMINADO: 'Vehículo eliminado exitosamente.',
     VEHICULO_ENCONTRADO: 'Se encontró el vehículo.',
     VEHICULOS_ENCONTRADOS: 'Se encontraron vehículos.'
   };

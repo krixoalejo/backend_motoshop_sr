@@ -8,11 +8,14 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    existeCorreoElectronico: async function(correoElectronico) {
+    existeCorreoElectronico: async function (correoElectronico) {
         return await Usuario.find({ where: { correoElectronico: correoElectronico } });
     },
-    existeIdentificacion: async function( identificacion ) {
+    existeIdentificacion: async function (identificacion) {
         return await Usuario.find({ where: { identificacion: identificacion } });
+    },
+    existeId: async function (id) {
+        return await Usuario.find({ where: { id: id } });
     }
 };
 
