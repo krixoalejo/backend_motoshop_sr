@@ -12,16 +12,29 @@ const UtilidadesUsuarios = require('./UtilidadesUsuariosController');
 module.exports = {
     obtenerVehiculos: async function (req, res) {
         try {
-            let vehiculos = await Vehiculo.find({ where: {} }).sort('id DESC');
+            const vehiculoInfo = req.allParams();
+            const limite = sails.limitePaginacion;
+            const skip = Number(vehiculoInfo.pagina) * limite;
+            const where = await UtilidadesVehiculos.obtenerFiltros(vehiculoInfo.filtros);
+            let vehiculos = await Vehiculo.find({
+                where: where,
+                skip: skip,
+                limit: limite 
+            }).sort('id DESC');
             if (!vehiculos || vehiculos.length === 0) {
                 Utilidades.respuestaRetorno(false, sails.constantes.NO_ENCONTRO_VEHICULOS, res);
             } else {
                 for (let i = 0; i < vehiculos.length; i++) {
-                    let usuario = await UtilidadesUsuarios.existeId(vehiculos[i].usuario);
+                    let usuario = await UtilidadesUsuarios.obtenerPorId(vehiculos[i].usuario);
                     vehiculos[i].usuario = usuario[0].primerNombre + ' ' + usuario[0].primerApellido;
                     vehiculos[i].estado = await Utilidades.obtenerEstado(vehiculos[i].estado);
                 }
-                Utilidades.respuestaRetorno(true, sails.constantes.VEHICULOS_ENCONTRADOS, res, vehiculos);
+                const cantidad = await UtilidadesVehiculos.obtenerCantidadDeVehiculos(where);
+                const infoVehiculos = {
+                    vehiculos: vehiculos,
+                    cantidad: cantidad
+                }
+                Utilidades.respuestaRetorno(true, sails.constantes.VEHICULOS_ENCONTRADOS, res, infoVehiculos);
             }
         } catch (error) {
             sails.log.debug(error);
@@ -29,7 +42,7 @@ module.exports = {
         }
     },
     obtenerVehiculoPorId: async function (req, res) {
-        let vehiculoInfo = req.allParams();
+        const vehiculoInfo = req.allParams();
         try {
             let vehiculo = await Vehiculo.find({
                 where: { id: vehiculoInfo.id }
@@ -37,7 +50,7 @@ module.exports = {
             if (!vehiculo || vehiculo.length === 0) {
                 Utilidades.respuestaRetorno(false, sails.constantes.NO_ENCONTRO_VEHICULO, res);
             } else {
-                let usuario = await UtilidadesUsuarios.existeId(vehiculo.usuario);
+                const usuario = await UtilidadesUsuarios.obtenerPorId(vehiculo.usuario);
                 vehiculo[0].usuario = usuario[0].identificacion;
                 Utilidades.respuestaRetorno(true, sails.constantes.VEHICULO_ENCONTRADO, res, vehiculo);
             }
@@ -48,26 +61,35 @@ module.exports = {
     },
     crearVehiculo: async function (req, res) {
         let vehiculoInfo = req.allParams();
+        let route = sails.baseUrl + vehiculoInfo.placa;
         if (vehiculoInfo.usuario) {
-            let usuarioInfo = await UtilidadesUsuarios.existeIdentificacion(vehiculoInfo.usuario);
+            const usuarioInfo = await UtilidadesUsuarios.obtenerPorIdentificacion(vehiculoInfo.usuario);
+            let existePlaca = await UtilidadesVehiculos.obtenerVehiculoPorPlaca(vehiculoInfo.placa);
             if (usuarioInfo.length > 0) {
-                let vehiculo = {
-                    placa: vehiculoInfo.placa,
-                    marca: vehiculoInfo.marca,
-                    linea: vehiculoInfo.linea,
-                    modelo: vehiculoInfo.modelo,
-                    cilindraje: vehiculoInfo.cilindraje,
-                    color: vehiculoInfo.color,
-                    usuario: usuarioInfo[0].id,
-                    seguro: 0,
-                    estado: sails.estados.ACTIVO
+                if (existePlaca.length === 0) {
+                    const vehiculo = {
+                        placa: vehiculoInfo.placa,
+                        marca: vehiculoInfo.marca,
+                        linea: vehiculoInfo.linea,
+                        modelo: vehiculoInfo.modelo,
+                        cilindraje: vehiculoInfo.cilindraje,
+                        color: vehiculoInfo.color,
+                        usuario: usuarioInfo[0].id,
+                        seguro: 0,
+                        estado: sails.estados.ACTIVO
+                    }
+                    await Vehiculo.create(vehiculo).then(() => {
+                        if (!sails.fs.existsSync(route)){
+                            sails.fs.mkdirSync(route);
+                        }
+                        Utilidades.respuestaRetorno(true, sails.constantes.VEHICULO_CREADO, res);
+                    }).catch((err) => {
+                        sails.log.debug(err);
+                        Utilidades.respuestaRetorno(false, sails.constantes.ERROR_CREAR_VEHICULO, res);
+                    });                    
+                } else {
+                    Utilidades.respuestaRetorno(false, sails.constantes.PLACA_YA_EXISTE, res);
                 }
-                await Vehiculo.create(vehiculo).then(() => {
-                    Utilidades.respuestaRetorno(true, sails.constantes.VEHICULO_CREADO, res);
-                }).catch((err) => {
-                    sails.log.debug(err);
-                    Utilidades.respuestaRetorno(false, sails.constantes.ERROR_CREAR_VEHICULO, res);
-                });
             } else {
                 Utilidades.respuestaRetorno(false, sails.constantes.NO_ENCONTRO_USUARIO_IDENTIFICACION, res);
             }
@@ -77,9 +99,9 @@ module.exports = {
     },
     actualizarVehiculo: async function (req, res) {
         let vehiculoInfo = req.allParams();
-        let vehiculoExistente = await UtilidadesVehiculos.obtenerVehiculoPorId(vehiculoInfo.id);
+        const vehiculoExistente = await UtilidadesVehiculos.obtenerVehiculoPorId(vehiculoInfo.id);
         if (vehiculoExistente.length > 0) {
-            let vehiculo = {
+            const vehiculo = {
                 placa: vehiculoInfo.placa,
                 marca: vehiculoInfo.marca,
                 linea: vehiculoInfo.linea,
@@ -99,19 +121,23 @@ module.exports = {
     },
     eliminarVehiculo: async function (req, res) {
         let vehiculoInfo = req.allParams();
-        let vehiculoExistente = await UtilidadesVehiculos.obtenerVehiculoPorId(vehiculoInfo.idVehiculo);
-        if (vehiculoExistente.length > 0) {
-            let vehiculo = {
-                estado: false
+        if (vehiculoInfo.idVehiculo) {
+            const vehiculoExistente = await UtilidadesVehiculos.obtenerVehiculoPorId(vehiculoInfo.idVehiculo);
+            if (vehiculoExistente.length > 0) {
+                const vehiculo = {
+                    estado: false
+                }
+                await Vehiculo.update(vehiculoExistente[0].id, vehiculo).then(() => {
+                    Utilidades.respuestaRetorno(true, sails.constantes.VEHICULO_ELIMINADO, res);
+                }).catch((err) => {
+                    sails.log.debug(err);
+                    Utilidades.respuestaRetorno(false, sails.constantes.ERROR_ELIMINAR_VEHICULO, res);
+                });
+            } else {
+                Utilidades.respuestaRetorno(false, sails.constantes.NO_ENCONTRO_VEHICULO, res);
             }
-            await Vehiculo.update(vehiculoExistente[0].id, vehiculo).then(() => {
-                Utilidades.respuestaRetorno(true, sails.constantes.VEHICULO_ELIMINADO, res);
-            }).catch((err) => {
-                sails.log.debug(err);
-                Utilidades.respuestaRetorno(false, sails.constantes.ERROR_ELIMINAR_VEHICULO, res);
-            });
         } else {
-            Utilidades.respuestaRetorno(false, sails.constantes.NO_ENCONTRO_VEHICULO, res);
+            Utilidades.respuestaRetorno(false, sails.constantes.NO_ID_VEHICULO, res);
         }
     }
 };

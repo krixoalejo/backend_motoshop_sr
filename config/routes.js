@@ -18,7 +18,7 @@ module.exports.routes = {
    */
 
   'GET /vehiculos/:id': 'VehiculosController.obtenerVehiculoPorId',
-  'GET /vehiculos': 'VehiculosController.obtenerVehiculos',
+  'POST /vehiculos/obtenerlos': 'VehiculosController.obtenerVehiculos',
   'POST /vehiculos': 'VehiculosController.crearVehiculo',
   'PUT /vehiculos': 'VehiculosController.actualizarVehiculo',
   'PUT /vehiculos/eliminar': 'VehiculosController.eliminarVehiculo',
@@ -26,8 +26,9 @@ module.exports.routes = {
   /**
    * Rutas para el usuario
    */
-  'GET /usuarios': 'UsuariosController.obtenerUsuarios',
   'GET /usuarios/:id': 'UsuariosController.obtenerUsuarioPorId',
+  'POST /usuarios/obtenerlos': 'UsuariosController.obtenerUsuarios',
   'POST /usuarios': 'UsuariosController.crearUsuario',
-  'POST /usuarios/ingresar': 'UsuariosController.ingresarUsuario',
+  'PUT /usuarios': 'UsuariosController.actualizarUsuario',
+  'PUT /usuarios/eliminar': 'UsuariosController.eliminarUsuario'
 };
